@@ -3,7 +3,7 @@
 #
 
 DEBIAN82_BOX = "debian82"
-DEBIAN82_BOX_URL = "http://stroobl.github.io/boxes/debian-8.2-amd64.box"
+DEBIAN82_BOX_URL = "https://media.githubusercontent.com/media/stroobl/vagrant-boxes/master/debian-8.2-amd64.box"
 
 Vagrant.configure("2") do |config|
 
