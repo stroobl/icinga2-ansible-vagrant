@@ -1,0 +1,28 @@
+---
+- name: install apache webserver
+  apt: name={{ item }} state=installed cache_valid_time=3600 update_cache=yes
+  with_items:
+    - apache2
+    - liblwp-useragent-determined-perl
+
+- name: Apache | Enable modules
+  apache2_module: name={{ item }} state=present
+  with_items:
+    - actions
+    - deflate
+    - rewrite
+    - ssl
+  notify: reload apache
+
+- name: make sure json is compressed for anag
+  lineinfile: dest=/etc/apache2/mods-available/deflate.conf line="          AddOutputFilterByType DEFLATE text/json" insertbefore="</IfModule>"
+  notify: restart apache
+
+- name: start apache
+  service: name=apache2 state=started enabled=yes
+
+- include: ssl.yml
+
+#- name: copy over htpasswd for fiaas.co
+#  copy: src=fiaasco.htpasswd dest=/etc/apache2/fiaasco.htpasswd owner=root group=root mode=0644
+#  when: inventory_hostname in groups.infra

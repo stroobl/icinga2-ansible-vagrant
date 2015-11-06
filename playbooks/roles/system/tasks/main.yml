@@ -1,0 +1,10 @@
+---
+- include: packages.yml
+
+- include: vm-tools.yml
+
+- include: limits.yml
+
+- name: put hosts file on vagrant
+  copy: src=vagrant-hosts dest=/etc/hosts mode=0644 owner=root group=root
+  when: ansible_virtualization_type=="virtualbox"

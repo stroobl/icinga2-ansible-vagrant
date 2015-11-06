@@ -1,0 +1,20 @@
+/*
+ * Generated a with Ansible
+ */
+
+object Endpoint "icinga2" {
+	host = "icinga2"
+}
+
+object Zone "master" {
+	endpoints = [ "icinga2" ]
+}
+
+object Endpoint "monitored" {
+}
+
+object Zone "monitored" {
+	//this is the local node = "monitored"
+	endpoints = [ "monitored" ]
+	parent = "master"
+}

@@ -1,0 +1,12 @@
+- name: create certificates directory
+  file: dest=/etc/ssl/{{ ansible_fqdn }} state=directory
+
+- name: generate certificates
+  command: openssl req -new -nodes -x509 -subj "/C=BE/ST=BXL/L=Belgium/O=IT/CN={{ ansible_fqdn }}" -days 3650 -keyout /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.key -out /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.crt -extensions v3_ca creates=/etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.crt
+
+- name: put ssl vhost template
+  template: src=httpd-default-ssl.conf.j2 dest=/etc/apache2/sites-available/default-ssl owner=root group=root mode=0644 
+
+- name: enable ssl vhost
+  command: a2ensite default-ssl creates=/etc/apache2/sites-enabled/default-ssl.conf
+  notify: restart apache

@@ -1,0 +1,4 @@
+*                soft    nofile          32000
+*                hard    nofile          32000
+*                soft    nproc           10000
+*                hard    nproc           10000

@@ -1,0 +1,9 @@
+---
+- apt_key: url=http://debmon.org/debmon/repo.key state=present
+- apt_repository: repo='deb http://debmon.org/debmon debmon-jessie main' state=present update_cache=yes
+
+- apt: name=icinga2 state=installed
+  notify: restart icinga2
+
+- apt: name=monitoring-plugins state=installed
+  notify: restart icinga2

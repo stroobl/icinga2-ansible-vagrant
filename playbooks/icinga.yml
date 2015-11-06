@@ -1,0 +1,17 @@
+- name: icinga2 playbook
+  hosts: icingamaster
+  sudo: true
+
+  pre_tasks:
+    - apt: update_cache=yes cache_valid_time=3600
+
+  roles:
+    - role: system
+    - role: httpd
+    - role: mysql
+    - role: icinga-master
+      tags: ['master']
+    - role: icinga-classicui
+      tags: ['classic']
+    - role: icingaweb2
+      tags: ['web']

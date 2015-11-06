@@ -1,0 +1,27 @@
+# Icinga2
+admin:
+  email: monitoring@yourdomain.invalid
+
+ticketsalt: fc9ba170b6489aaff2bf2e0c9504f572
+
+idodbname: icinga2
+idodbuser: icinga2
+idodbpass: baeTho5vai
+
+# Icinga web classic
+classicusers:
+    # demo user, username = pass
+    # htpasswd
+  - name: icingaadm
+    pass: $apr1$A9sGbTcc$1vc5AXweNKKOc3R1RqCRR1
+
+# Icingaweb2
+webdbname: icingaweb2
+webdbuser: icingaweb2
+webdbpass: quie6FieGh
+
+webusers:
+    # demo user, username = pass
+    # openssl passwd -1 icingaadmin
+  - name: icingaadmin
+    pass: $1$nvfR7TSj$POQPIsM9bBhEb.24AAIV10
