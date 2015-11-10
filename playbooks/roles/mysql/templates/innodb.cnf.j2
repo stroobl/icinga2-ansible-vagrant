@@ -1,19 +1,7 @@
 [mysqld]
 # InnoDB settings
 default-storage-engine          = innodb
-{% if ansible_memtotal_mb < 512 %}
-innodb_buffer_pool_size         = 16M
-{% elif ansible_memtotal_mb < 1024 %}
-innodb_buffer_pool_size         = 64M
-{% elif ansible_memtotal_mb < 2048 %}
-innodb_buffer_pool_size         = 128M
-{% elif ansible_memtotal_mb < 3072 %}
-innodb_buffer_pool_size         = 256M
-{% elif ansible_memtotal_mb < 4096 %}
-innodb_buffer_pool_size         = 512M
-{% else %}
-innodb_buffer_pool_size         = 1024M
-{% endif %}
+innodb_buffer_pool_size         = {{ (ansible_memtotal_mb/3)|round|int }}M
 innodb_additional_mem_pool_size = 10M
 #innodb_log_file_size            = 256M
 innodb_log_buffer_size          = 8M
