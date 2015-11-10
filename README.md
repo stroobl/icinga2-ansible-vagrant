@@ -7,6 +7,8 @@ This project starts with an empty Debian 8.2 vagrant box and uses Ansible to ins
 
 ## Executing ( vagrant )
 
+The playbook was tested with Ansible 1.9.4. Other versions will probably also work, but if you want to be sure it's easy to setup Ansible with virtualenv for a specific version with the steps below. You don't need the first three steps if you have a working ansible-playbook command in your path.
+
 * virtualenv ./venv/ansible-1.9.4
 * source ./venv/ansible-1.9.4/bin/activate
 * pip install ansible==1.9.4
