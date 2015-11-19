@@ -1,9 +1,9 @@
-# Icinga2 Ansible Vagrant: master and satellite node
+# Icinga2 Ansible Vagrant: master and client node
 
 This project starts with an empty Debian 8.2 vagrant box and uses Ansible to install:
 * Icinga2 master on the box icinga2
 * Icinga2-classicui and Icingaweb2 on the box icinga2
-* Icinga2 satellite on the box monitored. The box will be added to the master.
+* Icinga2 client on the box monitored. The box will be added to the master.
 
 ## Executing ( vagrant )
 

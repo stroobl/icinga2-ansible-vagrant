@@ -9,4 +9,4 @@
 
   roles:
     - system
-    - icinga-satellite
+    - icinga-client
