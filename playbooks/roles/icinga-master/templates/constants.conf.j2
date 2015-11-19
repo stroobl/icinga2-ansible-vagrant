@@ -1,6 +1,5 @@
 /**
- * This file defines global constants which can be used in
- * the other configuration files.
+ * Ansible managed
  */
 
 /* The directory which contains the plugins from the Monitoring Plugins project. */
@@ -18,7 +17,7 @@ const ManubulonPluginDir = "/usr/lib/nagios/plugins"
 const NodeName = "{{ ansible_fqdn }}"
 
 /* Our local zone name. */
-const ZoneName = NodeName
+const ZoneName = "master"
 
 /* Secret key for remote node tickets */
 const TicketSalt = "{{ ticketsalt }}"
