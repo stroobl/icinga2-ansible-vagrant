@@ -1,17 +1,5 @@
 ---
-# $pki_dir - /etc/icinga2/pki in the default installation
-# $fqdn - fully host+domain name of the client.
-# $icinga2_master - resolvable fqdn of the master
-# $icinga2_master_port - the port the master is connectable on.
-# $ticket - generated on the master via 'icinga2 pki ticket --cn $fqdn'
-
-# mkdir icinga:icinga 0700 $pki_dir
-# icinga2 pki new-cert --cn $fqdn --key $pki_dir/$fqdn.key --cert $pki_dir/$fqdn.crt
-# icinga2 pki save-cert --key $pki_dir/$fqdn.key --cert $pki_dir/$fqdn.crt --trustedcert $pki_dir/trusted-master.crt --host $icinga2_master
-# icinga2 pki request --host $icinga2_master --port $icinga2_master_port --ticket $ticket --key $pki_dir/$fqdn.key --cert $pki_dir/$fqdn.crt --trustedcert $pki_dir/trusted-master.crt --ca $pki_dir/ca.key
-# icinga2 node setup --ticket $ticket --endpoint $icinga2_master --zone $fqdn --master_host $icinga2_master --trustedcert $pki_dir/trusted-master.crt
-# service icinga2 restart  # or however you restart your icinga
-
+# Documentation: Client Setup for Remote Monitoring - Icinga2 manual setup withou wizard
 
 - name: request ticket on master
   shell: icinga2 pki ticket --cn {{ ansible_fqdn }}
@@ -19,30 +7,27 @@
   with_items: groups.icingamaster
   register: ticket
 
-- debug: var=ticket
-  with_items: groups.icingamaster
-
 - name: prepare pki directory
-  file: path=/etc/icinga2/pki state=directory owner=nagios group=nagios mode=0700
+  file: path=/etc/icinga2/pki state=directory owner=nagios group=nagios mode=0755
 
-- name: new-cert
+- name: Generate a new local self-signed certificate.
   shell: icinga2 pki new-cert --cn {{ ansible_fqdn }} --key /etc/icinga2/pki/{{ ansible_fqdn }}.key --cert /etc/icinga2/pki/{{ ansible_fqdn }}.crt creates=/etc/icinga2/pki/{{ ansible_fqdn }}.crt
   notify: restart icinga2
 
-- name: save-cert
+- name: Request the master certificate from the master host and store it as trusted-master.crt
   shell: icinga2 pki save-cert --key /etc/icinga2/pki/{{ ansible_fqdn }}.key --cert /etc/icinga2/pki/{{ ansible_fqdn }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --host {{ item }} creates=/etc/icinga2/pki/trusted-master.crt
   with_items: groups.icingamaster
   notify: restart icinga2
 
-- name: pki request
+- name: Send self-signed certificate to the master using the ticket number and receive a CA signed certificate and the master's ca.crt certificate
   shell: icinga2 pki request --host {{ item[1] }} --port 5665 --ticket {{ item[0].stdout }} --key /etc/icinga2/pki/{{ ansible_fqdn }}.key --cert /etc/icinga2/pki/{{ ansible_fqdn }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key creates=/etc/icinga2/pki/ca.key
   with_nested:
     - ticket.results
     - groups.icingamaster
   notify: restart icinga2
 
-- name: node setup
-  shell: icinga2 node setup --ticket {{ item[0].stdout }} --zone {{ ansible_fqdn }} --master_zone {{ item[1] }} --master_host {{ item[1] }} --endpoint {{ item[1] }},{{ item[1] }},5665 --trustedcert /etc/icinga2/pki/trusted-master.crt creates=/etc/icinga2/pki/ca.crt
+- name: Continue with the additional node setup steps
+  shell: icinga2 node setup --ticket {{ item[0].stdout }} --endpoint {{ item[1]}},{{ item[1] }},5665 --zone {{ ansible_fqdn }} --master_host {{ item[1] }} --master_zone master --trustedcert /etc/icinga2/pki/trusted-master.crt --accept-config --accept-commands creates=/etc/icinga2/pki/ca.crt
   with_nested:
     - ticket.results
     - groups.icingamaster
@@ -54,9 +39,9 @@
   with_items: groups.icingamaster
   notify: restart master icinga2
 
-- name: enable remote commands
-  template: src=api.conf.j2 dest=/etc/icinga2/features-available/api.conf owner=root group=root mode=0644
-  notify: restart icinga2
+- name: enable feature api
+  shell: icinga2 feature enable api creates=/etc/icinga2/features-enabled/api.conf
+  notify: restart icinga
 
 - meta: flush_handlers
 
