@@ -9,4 +9,4 @@
 
 - name: enable ssl vhost
   command: a2ensite default-ssl creates=/etc/apache2/sites-enabled/default-ssl.conf
-  notify: restart apache
+  notify: restart apache2

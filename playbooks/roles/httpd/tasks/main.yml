@@ -12,13 +12,13 @@
     - deflate
     - rewrite
     - ssl
-  notify: reload apache
+  notify: reload apache2
 
 - name: make sure json is compressed for anag
   lineinfile: dest=/etc/apache2/mods-available/deflate.conf line="          AddOutputFilterByType DEFLATE text/json" insertbefore="</IfModule>"
-  notify: restart apache
+  notify: restart apache2
 
-- name: start apache
+- name: start apache2
   service: name=apache2 state=started enabled=yes
 
 - include: ssl.yml
