@@ -24,4 +24,6 @@ webusers:
     # demo user, username = pass
     # openssl passwd -1 icingaadmin
   - name: icingaadmin
+    desc: Icinga Admin
+    mail: monitoring@yourdomain.invalid
     pass: $1$nvfR7TSj$POQPIsM9bBhEb.24AAIV10
