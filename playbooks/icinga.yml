@@ -1,5 +1,5 @@
 - name: icinga2 playbook
-  hosts: icingamaster
+  hosts: icingaservers
   sudo: true
 
   pre_tasks:

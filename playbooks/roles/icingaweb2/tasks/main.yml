@@ -25,11 +25,11 @@
   with_items:
     - imagick
     - intl
-  notify: restart apache
+  notify: restart apache2
 
 - name: configure php timezone (mod_php)
   lineinfile: dest=/etc/php5/apache2/php.ini regexp="^date.timezone" insertafter="^;date.timezone " line="date.timezone = Europe/Brussels"
-  notify: restart apache
+  notify: restart apache2
 
 - name: enable ido-mysql and command feature for web
   shell: icinga2 feature enable {{ item }} creates=/etc/icinga2/features-enabled/{{ item }}.conf
@@ -79,4 +79,4 @@
 
 - name: enable monitoring module
   file: src=/usr/share/icingaweb2/modules/monitoring dest=/etc/icingaweb2/enabledModules/monitoring state=link
-  notify: restart apache
+  notify: restart apache2

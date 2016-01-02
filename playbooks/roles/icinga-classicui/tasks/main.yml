@@ -1,7 +1,6 @@
 ---
-
 - apt: name=icinga2-classicui state=installed
-  notify: restart apache
+  notify: restart apache2
 
 - name: Icinga Classic UI requires the StatusDataWriter, CompatLogger and ExternalCommandListener
   shell: command="icinga2 feature enable statusdata compatlog command" creates=/etc/icinga2/features-enabled/compatlog.conf
@@ -9,7 +8,7 @@
 
 - name: Install icinga2-classicui
   apt: name=icinga2-classicui state=installed
-  notify: restart apache
+  notify: restart apache2
 
 - name: Put htpasswd users
   template: src=htpasswd.users dest=/etc/icinga2-classicui/htpasswd.users owner=root group=www-data mode=640

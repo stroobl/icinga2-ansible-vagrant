@@ -1,6 +1,6 @@
 ---
 - apt_key: url=http://debmon.org/debmon/repo.key state=present
-- apt_repository: repo='deb http://debmon.org/debmon debmon-jessie main' state=present update_cache=yes
+- apt_repository: repo="deb http://debmon.org/debmon debmon-{{ ansible_distribution_release }} main" state=present update_cache=yes
 
 - apt: name={{ item }} state=installed
   with_items:
@@ -10,4 +10,4 @@
   notify: restart icinga
 
 - apt: name=icinga2-classicui state=installed
-  notify: restart apache
+  notify: restart apache2
