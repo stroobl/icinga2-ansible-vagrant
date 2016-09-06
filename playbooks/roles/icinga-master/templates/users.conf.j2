@@ -1,4 +1,5 @@
-/* Ansible managed */
+/* {{ ansible_managed }} */
+
 {% for user in webusers %}
 object User "{{ user.name }}" {
   import "generic-user"
